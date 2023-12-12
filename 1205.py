@@ -15,8 +15,6 @@ light = open("water_to_light.txt", "r")
 temp = open("light_to_temp.txt", "r")
 hum = open("temp_to_hum.txt", "r")
 loc = open("hum_to_loc.txt", "r")
-
-
 soil_test = open("test_soil.txt", "r")
 
 
