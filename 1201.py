@@ -20,10 +20,10 @@ def calibrate_line(line, nums):
     last = ""
 
     for i in line:
-        if i in s and first == "":
+        if i in nums and first == "":
             first = i
             last = i
-        elif i in s:
+        elif i in nums:
             last = i
 
     return int(first + last)
@@ -39,5 +39,5 @@ def total(file, nums):
     return total
 
 
-print(total(f, nums))
+print(total(f, NUMS))
 
