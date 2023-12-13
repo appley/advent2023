@@ -78,7 +78,7 @@ def total_nums(f, nums, num_dict):
 
     for line in f:
         slices = create_string_slices(line)
-        total = total + create_line_num(slices, num_list, num_dict)
+        total = total + create_line_num(slices, nums, num_dict)
 
     return total
 
