@@ -20,11 +20,11 @@ def create_string_slices(s):
     slices = []
     start_pos = 0
 
-    while start_pos != len(s):
+    while start_pos < len(s):
 
         considered_string = s[start_pos:len(s)]
 
-        for i, j in enumerate(considered_string):
+        for i, _ in enumerate(considered_string):
             new_string = considered_string[0:i+1]
             slices.append(new_string)
         
@@ -45,13 +45,13 @@ def check_line_for_word(line, word):
             return new_word
 
 
-def create_final_num(num_list, nums, num_dict):
+def create_line_num(slices_list, nums, num_dict):
 
     first = ""
     last = ""
     start_pos = 0
 
-    for i in num_list:
+    for i in slices_list:
 
         if i in nums and first == "":
             first = i
@@ -72,13 +72,13 @@ def create_final_num(num_list, nums, num_dict):
     return int(first + last)
 
 
-def total_nums(f, num_list, num_dict):
+def total_nums(f, nums, num_dict):
 
     total = 0
 
     for line in f:
         slices = create_string_slices(line)
-        total = total + create_final_num(slices, num_list, num_dict)
+        total = total + create_line_num(slices, num_list, num_dict)
 
     return total
 
