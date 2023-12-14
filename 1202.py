@@ -1,5 +1,10 @@
 f = open("input/1202.txt", "r")
 
+# Cubes:
+RED = 12
+GREEN = 13
+BLUE = 14
+
 
 def load_dict(f):
 
@@ -27,5 +32,33 @@ def load_dict(f):
         # print(game_id, game_dict[game_id])
 
     return game_dict
+
+
+def is_valid_game(game_list):
+    
+    for g in game_list:
+        if g["green"] <= GREEN and g["red"] <= RED and g["blue"] <= BLUE:
+            continue
+        else:
+            return False
+
+    return True
+
+
+def total_valid_games(games_dict):
+
+    total = 
+
+    for k, v in game_dict:
+        if is_valid_game(v):
+            total = total + k
+
+    return total
+
+
+print(total_valid_games(load_dict(f)))
+
+
+
 
 
