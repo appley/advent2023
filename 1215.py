@@ -35,7 +35,7 @@ def total(input_list):
 
 # part 2
 
-def get_box(chars):
+def get_box_id(chars):
 
     s = chars.split("-")[0]
 
@@ -53,18 +53,18 @@ def focal_length(chars):
 
 # print(focal_length('rn=1'))
 
-def insert_focal_lens(lens, box):
+# def insert_focal_lens(lens, box):
 
-    if all(i == 0 for i in box):
-        box.insert(0, lens)
-        return box
-    else:
-        for i, j in enumerate(box):
-            if j == 0:
-                continue
-            else:
-                box.insert(i, lens)
-                return box
+#     if all(i == 0 for i in box):
+#         box.insert(0, lens)
+#         return box
+#     else:
+#         for i, j in enumerate(box):
+#             if j == 0:
+#                 continue
+#             else:
+#                 box.insert(i, lens)
+#                 return box
             
 
 # def insert_dash_lens(box, lens):
@@ -113,9 +113,10 @@ def insert_lens(lens, box):
         for i, j in enumerate(box):
             while j == 0:
                 continue
+            
 
 
-        
+
 
 def organize_lenses(input_list):
 
@@ -136,7 +137,7 @@ def organize_lenses(input_list):
         else:
             # box: label
             # (1, 'qp')
-            inst = get_box(i)
+            inst = get_box_id(i)
             if inst[1] in boxes[i]:
                 boxes[i] = 0
                 boxes = slide_lenses(boxes)
