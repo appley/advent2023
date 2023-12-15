@@ -83,24 +83,6 @@ def insert_focal_lens(lens, box):
 
 def slide_lenses(box):
 
-    for i, j in enumerate(box):
-        print(i, j, box)
-        if j == 0:
-            continue
-        else:
-            curr_box = i
-            next_box = curr_box + 1
-
-            while box[next_box] == 0 and next_box < len(box)-1:
-                print("inserting ", curr_box,  j)
-                box[next_box] = j
-                box[curr_box] = 0
-                curr_box = curr_box+ 1
-    
-    return box
-
-def slide_lenses(box):
-
     box.reverse()
     for i, j in enumerate(box):
         if j == 0:
@@ -122,6 +104,19 @@ TEST_BOX = [0, "rn=1", 0, 0, "abc", 0, 0]
 
 print(slide_lenses(TEST_BOX))
 
+
+def insert_lens(lens, box):
+
+    if all(i == 0 for i in box):
+        box[0] = lens
+    else:
+        for i, j in enumerate(box):
+            while j == 0:
+                continue
+
+
+        
+
 def organize_lenses(input_list):
 
     boxes = [0] * 256
@@ -132,10 +127,19 @@ def organize_lenses(input_list):
             # box: label, focal length
             # (0, ('rn', 1))
             inst = focal_length(i)
+            if inst[1][1] in boxes[inst[0]]:
+                boxes[inst[0]] = i
+            else:
+                boxes = insert_lens(i)
+
+        # handle box shifting
         else:
             # box: label
             # (1, 'qp')
             inst = get_box(i)
+            if inst[1] in boxes[i]:
+                boxes[i] = 0
+                boxes = slide_lenses(boxes)
 
     return boxes
 
