@@ -49,6 +49,19 @@ def focal_length(chars):
     return (hash(s[0]), ((s[0]), int(s[1])))
 
 
+def handle_focal_length(inst,  box):
+
+    for i, j in enumerate(box):
+        print("hi", inst[1], j)
+        if inst[1] in j[1]:
+            box[i] = ""
+            cp = box.copy()
+            box = slide_lenses(cp)
+        return box
+            
+        
+
+>>>>>>> Stashed changes
 def slide_lenses(box):
 
     box.reverse()
@@ -73,11 +86,17 @@ TEST_BOX = [0, "rn=1", 0, 0, "abc", 0, 0]
 
 def insert_lens(lens, box):
 
+<<<<<<< Updated upstream
     if all(i == 0 for i in box):
         box[0] = lens
+=======
+    if all(i == "" for i in box):
+        box[0] = inst
+>>>>>>> Stashed changes
         return box
     else:
         for i, j in enumerate(box):
+<<<<<<< Updated upstream
             print("examining index ", i, j)
             if j == 0:
                 continue
@@ -85,6 +104,19 @@ def insert_lens(lens, box):
                 box[i-1] = lens
                 return box
 
+=======
+            if inst[1][0] in j[1][0]:
+                box[i] = inst
+                cp = box.copy()
+                box = slide_lenses(cp)
+                
+                return box
+    
+        box.append(inst)
+        cp = box.copy()
+        box = slide_lenses(cp)
+        return box
+>>>>>>> Stashed changes
 
 def organize_lenses(input_list):
 
@@ -115,6 +147,15 @@ def organize_lenses(input_list):
 print(organize_lenses(TEST))
 
 
+<<<<<<< Updated upstream
+=======
+# def power(box, slot, fl)
+
+
+
+
+
+>>>>>>> Stashed changes
 
 # if __name__ == '__main__':
     
