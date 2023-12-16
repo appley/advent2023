@@ -39,5 +39,7 @@ def total(file, nums):
     return total
 
 
-print(total(f, NUMS))
+if __name__ == "__main__":
+
+    print(total(f, NUMS))
 

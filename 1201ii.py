@@ -84,6 +84,3 @@ def total_nums(f, nums, num_dict):
 
 
 print(total_nums(f, NUMS, STRING_NUMS))
-
-
-
