@@ -1,4 +1,4 @@
-input_one = open("1201input.txt", "r")
+input_one = open("input/1201.txt", "r")
 
 NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 

@@ -1,4 +1,4 @@
-f = open("1201iiinput.txt", "r")
+f = open("input/1201ii.txt", "r")
 
 NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
