@@ -45,26 +45,25 @@ def check_line_for_word(line, word):
             return new_word
 
 
-def create_line_num(slices_list, nums, num_dict):
+def create_line_num(slices_list):
 
     first = ""
     last = ""
-    start_pos = 0
 
     for i in slices_list:
 
-        if i in nums and first == "":
+        if i in NUMS and first == "":
             first = i
             last = i
         
-        elif i in nums:
+        elif i in NUMS:
             last = i
 
         else:
-            for k in num_dict:
+            for k in STRING_NUMS:
                 new_word = check_line_for_word(i, k)
                 if new_word: 
-                    word_num = num_dict[new_word]
+                    word_num = STRING_NUMS[new_word]
                     if first == "":
                         first = word_num
                     last = word_num
@@ -72,15 +71,17 @@ def create_line_num(slices_list, nums, num_dict):
     return int(first + last)
 
 
-def total_nums(f, nums, num_dict):
+def total_nums(f):
 
     total = 0
 
     for line in f:
         slices = create_string_slices(line)
-        total = total + create_line_num(slices, nums, num_dict)
+        total = total + create_line_num(slices)
 
     return total
 
 
-print(total_nums(f, NUMS, STRING_NUMS))
+if __name__ == "__main__":
+
+    print(total_nums(f))
