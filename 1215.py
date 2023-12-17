@@ -45,7 +45,7 @@ def focal_length(chars):
     return (hash(s[0]), ((s[0]), int(s[1])))
 
 
-def handle_focal_length(inst,  box):
+def remove_lens(inst,  box):
 
     for i, j in enumerate(box):
         if inst[1] in j:
@@ -88,7 +88,7 @@ def organize_lenses(input_list):
             # (1, 'qp')
             inst = get_box_id(i)
             box_state = boxes[inst[0]].copy()
-            boxes[inst[0]] = handle_focal_length(inst, box_state)
+            boxes[inst[0]] = remove_lens(inst, box_state)
 
     return boxes
 
