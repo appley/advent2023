@@ -87,7 +87,6 @@ def organize_lenses(input_list):
             # box: label
             # (1, 'qp')
             inst = get_box_id(i)
-            print(inst, boxes[inst[0]])
             box_state = boxes[inst[0]].copy()
             boxes[inst[0]] = handle_focal_length(inst, box_state)
 
