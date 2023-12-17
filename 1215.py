@@ -51,9 +51,10 @@ def handle_focal_length(inst,  box):
 
     for i, j in enumerate(box):
         if inst[1] in j:
-            box[i] = ""
-            cp = box.copy()
-            box = slide_lenses(cp)
+            box.remove(j)
+            # box[i] = ""
+            # cp = box.copy()
+            # box = slide_lenses(cp)
         return box
         
 
@@ -87,14 +88,13 @@ def insert_lens(lens, inst, box):
         for i, j in enumerate(box):
             if inst[1][0] in j:
                 box[i] = lens
-                cp = box.copy()
-                box = slide_lenses(cp)
-                
+                # cp = box.copy()
+                # box = slide_lenses(cp)               
                 return box
     
         box.append(lens)
-        cp = box.copy()
-        box = slide_lenses(cp)
+        # cp = box.copy()
+        # box = slide_lenses(cp)
         return box
 
 def organize_lenses(input_list):
