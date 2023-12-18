@@ -4,6 +4,8 @@ t = open("input/1214test.txt", "r")
 
 t2 = open("input/1214test2.txt", "r")
 
+t3 = open("input/1214test3.txt", "r")
+
 
 def create_map(f):
 
@@ -44,87 +46,49 @@ def to_string(map):
     return l
 
 
-# def tilt(map):
+def roll_rock(map, row, col):
 
-#     for row, markers in enumerate(map[0:len(map)-1]):
-#         print("level:", row)
-#         print(markers)
-#         for i, j in enumerate(markers):
-#             if j == "O":
-#                 print("handling rock: row, col", row, i)
-#                 count = 1 # check next row
-#                 # roll rock
-#                 # print("count + row ", count + row, len(map))
-#                 while count + row < len(map) - 1 and map[row+count][i] == ".":
-#                     print("checking row: ", row+count, "contents: ", map[row+count][i])
-                    
-#                     print ("adding rock to ", row + count, i)
-#                     map[row+count][i] = "O"
-#                     print("setting row, col to .", row, i)
-#                     # markers[i] = "."
-#                     map[row][i] = "."
-#                     count = count + 1
-#             else:
-#                 print("skipping not rock: ", i, j)
+    print("creating new map: ", row, col)
+    print(".....incoming map.......")
+    print(map)
 
-#     return map
+    map[row+1][col] = "O"
+    map[row][col] = "."
 
-
-
-def roll_rock(map, row, index):
-
-    print("orginal map: ", map)
-
-    map[row+1][index] = "O"
-    map[row][index] = "."
+    print(".....returning map......")
     print(map)
     return map
-    
+
 
 def tilt(map):
 
-    for row, markers in enumerate(map[0:len(map)-1]):
+    # cp = map.copy()
+    # cp.reverse()
+
+    # m = []
+
+    for row, string in enumerate(map[0:len(map)-1]):
         print("level:", row)
-        print(markers)
-        for i, j in enumerate(markers):
-            if j == "O":
-                print("handling rock: row, col", row, i)
-                if map[row+1][i] == ".":
-                    map = roll_rock(map, row, i) 
+        print(string)
+        for col, element in enumerate(string):
+            if element == "O":
+                print("handling rock: row, col", row, col)
+                if map[row+1][col] == ".":
+                    cp = map.copy()
+                    map = roll_rock(cp, row, col) 
                     # map[row+1][i] == "O"
-                    print("set map row : ", row + 1, map[row+1])
                     # markers[i] = "."
-            else:
-                print("skipping ", i, j)
+
+    # for i in reversed(cp):
+    #     m.append(i)
+
+    # cp.reverse()
     return map
-    #             count = 1 # check next row
-    #             # roll rock
-    #             # print("count + row ", count + row, len(map))
-    #             while count + row < len(map) - 1 and map[row+count][i] == ".":
-    #                 print("checking row: ", row+count, "contents: ", map[row+count][i])
-                    
-    #                 print ("adding rock to ", row + count, i)
-    #                 map[row+count][i] = "O"
-    #                 print("setting row, col to .", row, i)
-    #                 # markers[i] = "."
-    #                 map[row][i] = "."
-    #                 count = count + 1
-    #         else:
-    #             print("skipping not rock: ", i, j)
-
-    # return map
 
 
-# def tilt(map):
-
-#     for row, markers in enumerate(map[0:len(map)-1]):
-#         print("level:", row)
-#         for i, j in enumerate(markers):
-#             if j == "O":
-                
 
                 
-m = create_map(t2)
+m = create_map(t)
 # m.reverse()
 # print(m)
 x = tilt(m)
