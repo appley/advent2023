@@ -19,20 +19,7 @@ def create_map(f):
 
     return m
 
-
-# string map
-# def create_map(f):
-
-#     map = []
-    
-#     for line in f:
-#         map.append(line.strip())
-
-#     return map
-
-# print(create_map(t))
-
-
+# for printing delete after 
 def to_string(map):
 
     l = []
@@ -93,9 +80,24 @@ def roll_all_balls(map):
     return map
 
 
+def total_weight(map):
+
+    total = 0
+
+    for row, string in enumerate(map):
+        for col, element in enumerate(string):
+            if element == "O":
+                l = len(map) - row
+                total = total + l
+
+    return total
+
+
+
+
 
                 
-m = create_map(t)
+m = create_map(f)
 # print(is_rolled(m))
 
 m.reverse()
@@ -103,5 +105,7 @@ m.reverse()
 x = roll_all_balls(m)
 # print(x)
 x.reverse()
-print(to_string(x))
+# print(to_string(x))
+
+print(total_weight(x))
 
