@@ -186,14 +186,9 @@ def to_list(s):
 # generalize this
 def tilt_in_cycle(map):
 
-    n = map.copy()
-    map = tilt_all_north(n)
-    w = map.copy()
-    map = tilt_all_west(w)
-    s = map.copy()
-    map = tilt_all_south(s)
-    e = map.copy()
-    map = tilt_all_east(e)
+    nm = map.copy()
+
+    map = tilt_all_east(tilt_all_south(tilt_all_west(tilt_all_north(nm))))
 
     return map
 
@@ -209,11 +204,10 @@ def tilt_cycles(map, num_cycles):
     return map
 
 
-m = create_map(t)
-x = tilt_cycles(m, 3)
+m = create_map(f)
+x = tilt_cycles(m, 1000)
 print(to_string(x))
-# print(total_weight(x))
-
+print(total_weight(x))
 
 
 
