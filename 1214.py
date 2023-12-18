@@ -48,51 +48,60 @@ def to_string(map):
 
 def roll_rock(map, row, col):
 
-    print("creating new map: ", row, col)
-    print(".....incoming map.......")
-    print(map)
+    # print("creating new map: ", row, col)
+    # print(".....incoming map.......")
+    # print(map)
 
     map[row+1][col] = "O"
     map[row][col] = "."
 
-    print(".....returning map......")
-    print(map)
+    # print(".....returning map......")
+    # print(map)
     return map
 
 
 def tilt(map):
 
-    # cp = map.copy()
-    # cp.reverse()
-
-    # m = []
-
     for row, string in enumerate(map[0:len(map)-1]):
-        print("level:", row)
-        print(string)
+        # print("level:", row)
+        # print(string)
         for col, element in enumerate(string):
             if element == "O":
-                print("handling rock: row, col", row, col)
+                # print("handling rock: row, col", row, col)
                 if map[row+1][col] == ".":
                     cp = map.copy()
-                    map = roll_rock(cp, row, col) 
-                    # map[row+1][i] == "O"
-                    # markers[i] = "."
+                    map = roll_rock(cp, row, col)
+    
+    return map
 
-    # for i in reversed(cp):
-    #     m.append(i)
 
-    # cp.reverse()
+def is_rolled(map):
+
+    for row, string in enumerate(map[0:len(map)-1]):
+
+        for col, element in enumerate(string):
+            if element == "O" and map[row+1][col] == ".":
+                return False
+    return True
+
+
+def roll_all_balls(map):
+
+    while is_rolled(map) != True:
+        map = tilt(map)
+
     return map
 
 
 
                 
 m = create_map(t)
-# m.reverse()
+# print(is_rolled(m))
+
+m.reverse()
 # print(m)
-x = tilt(m)
+x = roll_all_balls(m)
 # print(x)
-# x.reverse()
+x.reverse()
 print(to_string(x))
 
