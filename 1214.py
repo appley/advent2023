@@ -37,26 +37,18 @@ def to_string(map):
 ####
 def roll_rock_south(map, row, col):
 
-    # print("creating new map: ", row, col)
-    # print(".....incoming map.......")
-    # print(map)
-
     map[row+1][col] = "O"
     map[row][col] = "."
 
-    # print(".....returning map......")
-    # print(map)
     return map
 
 
 def tilt_south(map):
 
     for row, string in enumerate(map[0:len(map)-1]):
-        # print("level:", row)
-        # print(string)
+
         for col, element in enumerate(string):
             if element == "O":
-                # print("handling rock: row, col", row, col)
                 if map[row+1][col] == ".":
                     cp = map.copy()
                     map = roll_rock_south(cp, row, col)
@@ -103,20 +95,13 @@ def total_weight(map):
 
 
 # part 2
+####
 
+# refactor into part 1 code
 def roll_rock_east(row, col):
-
-
-    # print("creating new map: ", row, col)
-    # print(".....incoming map.......")
-    # print(row)
 
     row[col] = "."
     row[col+1] = "O"
-
-
-    # print(".....returning map......")
-    # print(row)
 
     return row
 
@@ -127,8 +112,6 @@ def tilt_east_row(row):
     count = 0
 
     while count < len(row) - 1:
-        # print("PASS # ", count, )
-        # print(row[count:len(row)-1])
 
         for i, j in enumerate(row[0:len(row)-1]):
             if j == "O" and row[i+1] == ".":
@@ -165,8 +148,6 @@ def tilt_all_west(map):
     return m
 
 
-r = "#.O.....O#.O....O"
-
 def to_list(s):
 
     l = []
@@ -175,12 +156,6 @@ def to_list(s):
         l.append(i)
 
     return l
-
-# print(tilt_east_row(to_list(r)))
-                
-# m = create_map(f)
-# x = tilt_all_north(m)
-# print(total_weight(x))
 
 
 # generalize this
@@ -204,10 +179,17 @@ def tilt_cycles(map, num_cycles):
     return map
 
 
-m = create_map(f)
-x = tilt_cycles(m, 1000)
-print(to_string(x))
-print(total_weight(x))
+
+if __name__ == '__main__':
+
+
+    m = create_map(f)
+
+    # part 1             
+    print(total_weight(tilt_all_north(m)))
+
+    # part 2
+    print(total_weight(tilt_cycles(m, 1000)))
 
 
 
