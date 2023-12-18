@@ -33,7 +33,9 @@ def to_string(map):
     return l
 
 
-def roll_rock(map, row, col):
+# part 1
+####
+def roll_rock_south(map, row, col):
 
     # print("creating new map: ", row, col)
     # print(".....incoming map.......")
@@ -47,7 +49,7 @@ def roll_rock(map, row, col):
     return map
 
 
-def tilt(map):
+def tilt_south(map):
 
     for row, string in enumerate(map[0:len(map)-1]):
         # print("level:", row)
@@ -57,12 +59,12 @@ def tilt(map):
                 # print("handling rock: row, col", row, col)
                 if map[row+1][col] == ".":
                     cp = map.copy()
-                    map = roll_rock(cp, row, col)
+                    map = roll_rock_south(cp, row, col)
     
     return map
 
 
-def is_rolled(map):
+def is_tilted(map):
 
     for row, string in enumerate(map[0:len(map)-1]):
 
@@ -72,12 +74,19 @@ def is_rolled(map):
     return True
 
 
-def roll_all_balls(map):
+def tilt_all_south(map):
 
-    while is_rolled(map) != True:
-        map = tilt(map)
+    while is_tilted(map) != True:
+        map = tilt_south(map)
 
     return map
+
+def tilt_all_north(map):
+
+    map.reverse()
+    new_map = tilt_all_south(map)
+    new_map.reverse()
+    return new_map
 
 
 def total_weight(map):
@@ -85,7 +94,7 @@ def total_weight(map):
     total = 0
 
     for row, string in enumerate(map):
-        for col, element in enumerate(string):
+        for element in string:
             if element == "O":
                 l = len(map) - row
                 total = total + l
@@ -93,19 +102,118 @@ def total_weight(map):
     return total
 
 
+# part 2
+
+def roll_rock_east(row, col):
+
+
+    # print("creating new map: ", row, col)
+    # print(".....incoming map.......")
+    # print(row)
+
+    row[col] = "."
+    row[col+1] = "O"
+
+
+    # print(".....returning map......")
+    # print(row)
+
+    return row
 
 
 
+def tilt_east_row(row):
+
+    count = 0
+
+    while count < len(row) - 1:
+        # print("PASS # ", count, )
+        # print(row[count:len(row)-1])
+
+        for i, j in enumerate(row[0:len(row)-1]):
+            if j == "O" and row[i+1] == ".":
+                cp = row.copy()
+                row = roll_rock_east(cp, i)
+
+        count = count + 1
+    
+    return row
+
+
+def tilt_all_east(map):
+
+    new_map = []
+
+    for row in map:
+        cp = row.copy()
+        new_row = tilt_east_row(cp)
+        new_map.append(new_row)
+    
+    return new_map
+
+
+def tilt_all_west(map):
+
+    m = []
+    for row in map:
+        rev = row.copy()
+        rev.reverse()
+        tw = tilt_east_row(rev)
+        tw.reverse()
+        m.append(tw)
+
+    return m
+
+
+r = "#.O.....O#.O....O"
+
+def to_list(s):
+
+    l = []
+
+    for i in s:
+        l.append(i)
+
+    return l
+
+# print(tilt_east_row(to_list(r)))
                 
-m = create_map(f)
-# print(is_rolled(m))
+# m = create_map(f)
+# x = tilt_all_north(m)
+# print(total_weight(x))
 
-m.reverse()
-# print(m)
-x = roll_all_balls(m)
-# print(x)
-x.reverse()
-# print(to_string(x))
 
-print(total_weight(x))
+# generalize this
+def tilt_in_cycle(map):
+
+    n = map.copy()
+    map = tilt_all_north(n)
+    w = map.copy()
+    map = tilt_all_west(w)
+    s = map.copy()
+    map = tilt_all_south(s)
+    e = map.copy()
+    map = tilt_all_east(e)
+
+    return map
+
+
+
+def tilt_cycles(map, num_cycles):
+
+    for cycle in range(num_cycles):
+        print("cycle ", cycle)
+        cp = map.copy()
+        map = tilt_in_cycle(cp)
+    
+    return map
+
+
+m = create_map(t)
+x = tilt_cycles(m, 3)
+print(to_string(x))
+# print(total_weight(x))
+
+
+
 
