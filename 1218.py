@@ -19,7 +19,6 @@ def get_instructions(f):
 
     return l
 
-# print(get_instructions(f))
 
 def dig_r(m, row, col, num):
 
@@ -57,17 +56,23 @@ def dig_u(m, row, col, num):
 
 def dig(plan):
 
-    m = [["." for _ in range(500)] for _ in range(5000)]
+    # m = [["." for _ in range(500)] for _ in range(5000)]
 
-    curr_row = 400
-    curr_col = 70
+    m = [["." for _ in range(10)] for _ in range(10)]
+
+    curr_row = 0
+    curr_col = 0
+
+
+    # curr_row = 400
+    # curr_col = 70
 
     count = 1
     for p in plan:
         meters = p[1]
-        print("count", count)
+        # print("count", count)
         print(p)
-        print("turning ", p[0], "from ", curr_row, curr_col)
+        # print("turning ", p[0], "from ", curr_row, curr_col)
         if p[0] == "R":
             m = dig_r(m, curr_row, curr_col, meters)
             curr_col = curr_col + meters
@@ -117,25 +122,27 @@ def fill(row):
         count = 1
        
         print("current start stop", (start, stop))
-        if len(row) > i + count and j == '#':
+        if j == '#':
 
             if i == stop:
                 continue
 
             else:
-
-                start = i
-                print("found start ", start)
-
+   
                 while i + count < len(row) and row[i+count] != "#":
+                    start = i
+                    print("found start ", start)
+
+                    print("looking at #s", row[i:len(row)-1])
 
                     count = count + 1
 
-                stop = i + count
-                print("stopping ", stop)
+                if "#" in row[i+1:len(row)-1]:
 
-                if stop:
+                    stop = i + count
+                    print("stopping ", stop)
                     indices.append((start, stop))
+                    start = 0
 
         
     print(indices)
@@ -147,14 +154,9 @@ def fill(row):
 
     return row
 
+# x = ['#', '#', '.', '.', '#', '#', '#', '.', '.', '.']
 
-
-
-
-row = ['.', '.', '#', '.', '.', '.', '#', '.']
-
-
-print(fill(r))
+# print(fill(x))
 
 
 def fill2(row):
@@ -236,11 +238,6 @@ def to_string(map):
 
     return l
 
-# print(total(dig(get_instructions(t))))
-
-
-# print(total(fill_map(dig(get_instructions(f)))))
-
 
 def print_map(map):
 
@@ -251,16 +248,15 @@ def print_map(map):
 
 
 
-# filled_map = fill_map(dig(get_instructions(f)))
+# filled_map = fill_map(dig(get_instructions(t)))
 # m = total(filled_map)
 # print(m)
 
 # print_map(to_string(filled_map))
 
-# m = to_string(fill_map(dig(get_instructions(t))))
-# print_map(m)
-            
-
+m = to_string(fill_map(dig(get_instructions(t))))
+# m = fill_map(dig(get_instructions(t)))
+print_map(m)
 
 
 
