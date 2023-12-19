@@ -122,27 +122,25 @@ def fill(row):
         count = 1
        
         print("current start stop", (start, stop))
-        if j == '#':
+        
+        if i == stop:
+            continue
 
-            if i == stop:
-                continue
+        else:
 
-            else:
-   
-                while i + count < len(row) and row[i+count] != "#":
-                    start = i
-                    print("found start ", start)
+            while i + count < len(row) and j == '#' and row[i+count] != "#":
+                start = i
+                print("found start ", start)
 
-                    print("looking at #s", row[i:len(row)-1])
+                print("looking at #s", row[i:len(row)-1])
 
-                    count = count + 1
+                count = count + 1
 
-                if "#" in row[i+1:len(row)-1]:
+            if "#" in row[i+1:len(row)-1]:
 
-                    stop = i + count
-                    print("stopping ", stop)
-                    indices.append((start, stop))
-                    start = 0
+                stop = i + count
+                print("stopping ", stop)
+                indices.append((start, stop))
 
         
     print(indices)
