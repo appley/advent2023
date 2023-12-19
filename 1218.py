@@ -106,35 +106,42 @@ def fill_row(row, start, stop):
     return row
 
 
-r = ['.', '#', '.', '#', '.', '.', '#', '.', '#', '.', '#', '.', '.']
+
+
 
 def fill(row):
+
+    print(row)
 
     indices = []
 
     start = 0
-    stop = 0   
+    stop = 0
 
     for i, j in enumerate(row):
 
+        print("current start stop", (start, stop)) 
         print(i, j)
 
         count = 1
        
-        print("current start stop", (start, stop))
+        # if i == stop:
+        #     continue
+
+        if j == "#" and start != -1:
+            print("setting new start", i)
+            start = i
         
-        if i == stop:
-            continue
+        else:         
 
-        else:
-
-            while i + count < len(row) and j == '#' and row[i+count] != "#":
-                start = i
-                print("found start ", start)
-
-                print("looking at #s", row[i:len(row)-1])
-
+            while i + count < len(row) and row[i+count] != "#":
+                
                 count = count + 1
+            
+            # stop = count + i
+            # indices.append((start, stop))
+                # print("looking at #s", row[i:len(row)-1])
+
 
             if "#" in row[i+1:len(row)-1]:
 
@@ -152,10 +159,13 @@ def fill(row):
 
     return row
 
-# x = ['#', '#', '.', '.', '#', '#', '#', '.', '.', '.']
 
-# print(fill(x))
 
+r = ['.', '#', '.', '#', '.', '.', '#', '.', '#', '.', '#', '.', '.']
+
+x = ['#', '#', '.', '.', '#', '#', '#', '.', '.', '.']
+
+print(fill(x))
 
 def fill2(row):
 
@@ -252,9 +262,9 @@ def print_map(map):
 
 # print_map(to_string(filled_map))
 
-m = to_string(fill_map(dig(get_instructions(t))))
+# m = to_string(fill_map(dig(get_instructions(t))))
 # m = fill_map(dig(get_instructions(t)))
-print_map(m)
+# print_map(m)
 
 
 
