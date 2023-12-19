@@ -1,6 +1,6 @@
 f = open("input/1218.txt", "r")
 
-t = open("input/1218test2.txt", "r")
+t = open("input/1218test.txt", "r")
 
 # parse input into instructions
 # draw map
@@ -101,7 +101,63 @@ def fill_row(row, start, stop):
     return row
 
 
+r = ['.', '#', '.', '#', '.', '.', '#', '.', '#', '.', '#', '.', '.']
+
 def fill(row):
+
+    indices = []
+
+    start = 0
+    stop = 0   
+
+    for i, j in enumerate(row):
+
+        print(i, j)
+
+        count = 1
+       
+        print("current start stop", (start, stop))
+        if len(row) > i + count and j == '#':
+
+            if i == stop:
+                continue
+
+            else:
+
+                start = i
+                print("found start ", start)
+
+                while i + count < len(row) and row[i+count] != "#":
+
+                    count = count + 1
+
+                stop = i + count
+                print("stopping ", stop)
+
+                if stop:
+                    indices.append((start, stop))
+
+        
+    print(indices)
+    if len(indices) != 0:
+
+        for t in indices:
+            cp = row.copy()
+            row = fill_row(cp, t[0], t[1])
+
+    return row
+
+
+
+
+
+row = ['.', '.', '#', '.', '.', '.', '#', '.']
+
+
+print(fill(r))
+
+
+def fill2(row):
 
     indices = []    
 
@@ -125,7 +181,7 @@ def fill(row):
                 count = count + 1
                 continue
     
-    # print(indices)
+    print(indices)
     if len(indices) != 0:
 
         for i, j in enumerate(indices[0:len(indices)-1]):
@@ -137,12 +193,8 @@ def fill(row):
     return row
 
 
-r = ['.', '#', '.', '#', '.', '.', '.', '.', '#', '.']
 
 
-row = ['.', '.', '#', '.', '.', '.', '#', '.']
-
-# print(fill(row))
 
 
 def fill_map(map):
@@ -154,7 +206,6 @@ def fill_map(map):
     # print(map)
 
     return map
-
 
 def total(map):
 
@@ -206,8 +257,8 @@ def print_map(map):
 
 # print_map(to_string(filled_map))
 
-m = to_string(fill_map(dig(get_instructions(f))))
-print_map(m)
+# m = to_string(fill_map(dig(get_instructions(t))))
+# print_map(m)
             
 
 
