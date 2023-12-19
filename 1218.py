@@ -1,6 +1,6 @@
 f = open("input/1218.txt", "r")
 
-t = open("input/1218test.txt", "r")
+t = open("input/1218test2.txt", "r")
 
 # parse input into instructions
 # draw map
@@ -57,40 +57,43 @@ def dig_u(m, row, col, num):
 
 def dig(plan):
 
-    m = [["." for _ in range(10000)] for _ in range(10000)]
+    m = [["." for _ in range(500)] for _ in range(5000)]
 
-    curr_row = 0
-    curr_col = 0
+    curr_row = 400
+    curr_col = 70
 
+    count = 1
     for p in plan:
         meters = p[1]
+        print("count", count)
         print(p)
         print("turning ", p[0], "from ", curr_row, curr_col)
         if p[0] == "R":
             m = dig_r(m, curr_row, curr_col, meters)
             curr_col = curr_col + meters
-            print("pos", curr_row, curr_col)
+            # print("pos", curr_row, curr_col)
         if p[0] == "D":
             m = dig_d(m, curr_row, curr_col, meters)
             curr_row = curr_row + meters
-            print("pos", curr_row, curr_col)
+            # print("pos", curr_row, curr_col)
 
         if p[0] == "L":
             m = dig_l(m, curr_row, curr_col, meters)
             curr_col = curr_col - meters
-            print("complete L new pos", curr_row, curr_col)
+            # print("complete L new pos", curr_row, curr_col)
         
         if p[0] == "U":
             m = dig_u(m, curr_row-1, curr_col, meters)
             curr_row = curr_row - meters
-            print("pos", curr_row, curr_col)       
+            # print("pos", curr_row, curr_col)   
+        count = count + 1    
 
     return m
 
 
 def fill_row(row, start, stop):
 
-    print(start, stop)
+    # print(start, stop)
 
     for i in range(start, stop):
         row[i] = "#"
@@ -104,8 +107,8 @@ def fill(row):
 
     for i, j in enumerate(row):
 
-        print("considering ,", i, j)
-        print("indices", indices)
+        # print("considering ,", i, j)
+        # print("indices", indices)
 
         # if j == "#" and row[i+1] == ".":
         #     indices.append(i) # start index
@@ -116,13 +119,13 @@ def fill(row):
         #     indices.append(i+count)
 
         count = 1
-        if j == "#":
+        if j == "#": # and i + count < len(row) - 1:
             indices.append(i)
-            if row[i+count] == ".":
+            if len(row) - 1 > i + count and row[i+count] == ".":
                 count = count + 1
                 continue
     
-    print(indices)
+    # print(indices)
     if len(indices) != 0:
 
         for i, j in enumerate(indices[0:len(indices)-1]):
@@ -148,7 +151,7 @@ def fill_map(map):
         cp = row.copy()
         map[row_num]= fill(cp)
 
-    print(map)
+    # print(map)
 
     return map
 
@@ -157,10 +160,14 @@ def total(map):
 
     total = 0
 
+    count = 1
     for row in map:
+        print("row",  count)
         for element in row:
             if element == "#":
                 total = total + 1
+                print("curr total ", total)
+        count = count + 1
     
     return total
 
@@ -181,9 +188,26 @@ def to_string(map):
 # print(total(dig(get_instructions(t))))
 
 
-print(total(fill_map(dig(get_instructions(f)))))
+# print(total(fill_map(dig(get_instructions(f)))))
 
 
+def print_map(map):
+
+    for row in map:
+        print(row)
+
+    return map
+
+
+
+# filled_map = fill_map(dig(get_instructions(f)))
+# m = total(filled_map)
+# print(m)
+
+# print_map(to_string(filled_map))
+
+m = to_string(fill_map(dig(get_instructions(f))))
+print_map(m)
             
 
 
