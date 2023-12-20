@@ -148,6 +148,7 @@ def fill(row):
                 stop = i + count
                 print("stopping ", stop)
                 indices.append((start, stop))
+                # fill(row[i+1:len(row)-1])
 
         
     print(indices)
@@ -165,7 +166,7 @@ r = ['.', '#', '.', '#', '.', '.', '#', '.', '#', '.', '#', '.', '.']
 
 x = ['#', '#', '.', '.', '#', '#', '#', '.', '.', '.']
 
-print(fill(x))
+print(fill(r))
 
 def fill2(row):
 
