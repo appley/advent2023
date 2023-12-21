@@ -1,60 +1,6 @@
 f = open("input/1220.txt", "r")
 
-INST = ""
-
-
-class FlipFlip:
-    def __init__(self, name):
-        self.name = name
-        self.state = 0
-        self.pulse_state = 0
-
-    def send_pulse(pulse_type):
-        if pulse_type == 0:
-            return 0
-        if pulse_type == 1:
-            return 1
-
-    def receive_pulse(self, pulse_type):
-        if pulse_type == 0:
-            if self.state == 0:
-                self.state = 1
-                self.send_pulse(1)
-                self.pulse_state = 1
-            if self.state == 1:
-                self.state = 0
-                self.send_pulse(0)
-                self.pulse_state = 0
-
-
-class Con:
-    def __init__(self, name, state):
-        self.name = name        
-        # list of connected modules types
-        self._connected = []
-
-    def receive_pulse(self, module)          
-            for m in self._connected:
-                if m.name == module.name:
-                    self._connected.remove(m)
-            self._connected.append(module)
-
-    def send_pulse(self, dest):
-        if all(i.pulse_state == 1 for i in self._connected):
-            return 0
-        else:
-            return 1
-        
-
-class Broadcaster:
-    def __init__(self):
-        pass
-
-    def send_pulse(self, pulse_type, dest):
-        return pulse_type
-
-    def receive_pulse(self, pulse_type):
-        self.send_pulse(pulse_type)
+t = open("input/1220test.txt", "r")
 
 
 def instructions(f):
@@ -68,10 +14,10 @@ def instructions(f):
         d_list = []
 
         for d in dest:
-            d_list.append(d)
+            d_list.append(d.strip())
 
         if l[0] == "broadcaster":
-            dict["broadcaster"] = d_list
+            dict["broadcaster"] = ("b", d_list)
 
         else:
             dict[l[0][1:]] = (l[0][0], d_list)
@@ -79,47 +25,67 @@ def instructions(f):
     return dict
 
 
-print(instructions(f))
-
-def press(instruction):
-
-    queue = []
-
-    # check module type
-    # send to destinations
-        # check module type of destination
-        # create instance of destination modules
-        # receive pulses
-    # queue pulses to send
+INST = instructions(t)
+print(INST)
 
 
+class FlipFlip:
+    def __init__(self, name):
+        self.name = name
+        self.state = 0
+        self.pulse_state = 0
+
+    def _send_pulse(self, pulse_type):
+        if pulse_type == 0:
+            return 0
+        if pulse_type == 1:
+            return 1
+
+    def receive_pulse(self, pulse_type):
+        if pulse_type == 0:
+            if self.state == 0:
+                self.state = 1
+                self._send_pulse(1)
+                self.pulse_state = 1
+            if self.state == 1:
+                self.state = 0
+                self._send_pulse(0)
+                self.pulse_state = 0
 
 
+class Con:
+    def __init__(self, name, state):
+        self.name = name        
+        # list of connected modules types
+        self._connected = []
 
+    def receive_pulse(self, pulse_type):      
+            for m in self._connected:
+                m.receive_pulse(pulse_type)
+            self._send_pulse()
 
+    def _send_pulse(self, dest):
+        if all(i.pulse_state == 1 for i in self._connected):
+            return (0, dest)
+        else:
+            return (1, dest)
+        
 
+class Broadcaster:
+    def __init__(self):
+        self.name = "broadcaster"
 
+    def _send_pulse(self, pulse_type, dest):
+        return (pulse_type, dest)
 
+    def receive_pulse(self, pulse_type):
+        self._send_pulse(pulse_type)
 
-
-# def flip(pulse, curr_state):
-
-#     if pulse == 1:
-#         return (curr_state, False)
-    
-#     elif curr_state == 0:
-#         # turn on, high pulse
-#         return (1, 1)
-    
-#     else:
-#         # turn off, low pulse
-#         return(0, 0)
-    
-
-# def con(pulse, curr_state):
 
     
 def build_module(mod_type, name):
+
+    print(mod_type)
 
     if mod_type == "%":
         return FlipFlip(name)
@@ -129,14 +95,52 @@ def build_module(mod_type, name):
         return Broadcaster()
 
 
+def pulse(module, pulse_type):
+
+    inst = INST[module.name]
+    print(inst[1])
+
+    modules = []
+
+    for i in inst[1]:
+        print(i)
+        type = INST[i][0]
+        m = build_module(type, i)
+        modules.append(m)
+
+    for m in modules:
+        m.receive_pulse(pulse_type)
+
+    # for m in modules:
+    #     print(m.name, m.state, m.pulse_state)
+
+    return modules
 
 
-# def pulse(key, dest):
+print(pulse(Broadcaster(), 0))
 
-#     inst = INST[key]
-#     type = inst[0]
 
-#     for i in inst[1]:
+def press():
+
+    pulse_type = 0
+    start_modules = pulse(Broadcaster(), pulse_type)
+    queue = start_modules.copy()
+
+    while len(queue) != 0:
+        for q in queue:
+            type = "" # XCXC
+            # XCXC get pulse type
+            pulse(q, )
+
+
+    # check module type
+    # send to destinations
+        # check module type of destination
+        # create instance of destination modules
+        # receive pulses
+    # queue pulses to send
+
+    
 
 
 
