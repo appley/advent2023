@@ -17,7 +17,7 @@ def instructions(f):
             d_list.append(d.strip())
 
         if l[0] == "broadcaster":
-            dict["broadcaster"] = ("b", d_list)
+            dict["broadcaster"] = ("br", d_list)
 
         else:
             dict[l[0][1:]] = (l[0][0], d_list)
@@ -36,14 +36,11 @@ class FlipFlop:
         self.dests = INST[name][1]
 
     def send_pulse(self):
-        d = []
-        for i in self.dest:
-            m = build_module(i)
-            module_state = m.receive_pulse(self.state)
-            d.append(module_state)
-        return d
+        pass
 
-    def receive_pulse(self, pulse_type):
+    def receive_pulse(self, module, pulse_type):
+        if pulse_type == 1:
+            return False
         if pulse_type == 0:
             if self.state == 0:
                 self.state = 1
@@ -53,33 +50,32 @@ class FlipFlop:
                 self.state = 0
                 # self._send_pulse(0)
                 self.pulse_state = 0
+        return True
 
 class Con:
     def __init__(self, name):
         self.name = name        
         # list of connected modules types
-        self._connected = []
         self.dests = INST[name][1]
+        self._connected = {}
         self.state = 0
 
     def send_pulse(self):
         d = []
-        if all(i.pulse_state == 1 for i in self._connected):
-            pulse_type = 0
+        if all(v == 1 for _, v in self._connected.items()):
+            print("starting state for ", self.name, "to", self.state)
+            self.state = 0
+            print("setting state for ", self.name, "to", self.state)
         else:
-            pulse_type = 1
-        for i in self.dest:
-            m = build_module(i)
-            module_state = m.receive_pulse(pulse_type)
-            d.append(module_state)
-        return d
+            self.state = 1
+            print("setting state for ", self.name, "to", self.state)
 
-    def receive_pulse(self, pulse_type):
-        self.state = pulse_type    
-        for m in self._connected:
-            m.receive_pulse(pulse_type)
-        return self
-        # self._send_pulse()
+
+    def receive_pulse(self, module, pulse_type):
+        self._connected[module.name] = pulse_type
+        self.state = pulse_type
+        print("connected modules for ", self.name, self._connected)
+        return True
 
 
 class Broadcaster:
@@ -109,41 +105,24 @@ def build_module(name):
         return Broadcaster()
 
 
-def receive_pulse(module, pulse_type):
-
-    inst = INST[module.name]
-    print(inst[1])
-
-    modules = []
-
-    for i in inst[1]:
-        print(i)
-        type = INST[i][0]
-        m = build_module(i)
-        modules.append(m)
-
-    for m in modules:
-        m.receive_pulse(pulse_type)
-
-    # for m in modules:
-    #     print(m.name, m.state, m.pulse_state)
-
-    return modules
-
-
 def send_pulse(module, modules):
     # module in current state and destination list
 
+    count = 0
+
     for m in modules:
         if m.name in module.dests:
-            m.receive_pulse(module.state)
+            print("sending pulse from ", module.name, "to", m.name, module.state)
+            m.send_pulse()
+            pulsed = m.receive_pulse(module, module.state)
+            print("pulsed ", pulsed, m.name, module.state)
 
-    #returns state of module after sending pulse
+            count = count + 1
 
+        print("count ", m.state)
+    
+    return pulsed, count, m.state
 
-
-
-# print(pulse(Broadcaster(), 0))    
 
 def build_all_modules():
 
@@ -156,17 +135,6 @@ def build_all_modules():
     return modules
 
 
-
-def initialize_dests(module, modules):
-
-    for m in modules:
-        print(m.name, INST[module.name][1])
-        if m.name in INST[module.name][1]:
-            print("found connection")
-            module.dests.append(m)     
-    return modules       
-
-
 def get_module(name, modules):
 
     for m in modules:
@@ -174,7 +142,10 @@ def get_module(name, modules):
             return m
 
 
-def press():
+def button():
+
+    high = 0
+    low = 0
 
     modules = build_all_modules()
 
@@ -189,71 +160,51 @@ def press():
 
     send_pulse(b, modules)
 
-    for m in modules:
-        print(m.name, m.state, m)
-
     # queue 
-    while len(queue) != 0:
-        for _, q in enumerate(queue):
-            # get module w name
-            m = get_module(q, modules)
+    for _, q in enumerate(queue):
+        print("queue", queue)
+        # get module w name
+        m = get_module(q, modules) # get sending module
 
-            print(m.name, m.state, m)
+        print("found module", m.name, m.state, m)
 
-            send_pulse(m, modules)
+        s = send_pulse(m, modules)
+        if s[0]:  # module sends to destination modules
+
+            print("PULSE ", m.name)
+
+            if s[2] == 0:
+                low = low + s[1]
+
+            else:
+                high = high + s[1]
+
+            # appending destinations to send queue
             for d in m.dests:
-                queue.append(d)
-            queue.pop(0)
+                print("dests", m.dests) # append next sender
+                print("appending ", d)
+                queue.append(d)  # append to send queue
+                print("counting dest", d)
+                print("module state", m.state)
+                if m.state == 0:
+                    low = low + 1
+                else:
+                    high = high + 1
+        # send_pulse(m, modules)
 
     for m in modules:
         print(m.name, m.state, m)
 
-
-            # XCXC flatten list
-            # for e in enqueue:
-            #     print("enqueing", e)
-            #     queue.append(e)
-            # queue.pop(i)
-            # print("queue", queue)
-            # XCXC get pulse type
-
-        print(queue)
-    
-
-    
-
-
-    # queue = b.send_pulse()
-    # dests = INST[b][1]
-
-    # dests receive pulses
-    # for m in modules, for d in dests:
-    #     if m.name == d:
-    #         m.receive_pulse(pulse_type)
+    return (high, low)
 
 
 
+print(button())
+def press(num):
 
-    # check module type
-    # send to destinations
-        # check module type of destination
-    # XCXC check current queue for modules and send signal to them
-        # create instance of destination modules
-        # receive pulses
-    # queue pulses to send
+    for i in range(num):
+        button()
 
-
-
-
-    # return queue
-
-
-
-
-
-# print(build_all_modules())
-    
-print(press())
 
 
 
