@@ -40,6 +40,12 @@ class FlipFlop:
 
     def receive_pulse(self, module, pulse_type):
         if pulse_type == 1:
+            # if self.state == 0:
+            #     self.state = 1
+            # elif self.state == 1:
+            #     self.state = 0
+            #     # self._send_pulse(0)
+            #     self.pulse_state = 0       
             return False
         if pulse_type == 0:
             if self.state == 0:
@@ -114,14 +120,15 @@ def send_pulse(module, modules):
         if m.name in module.dests:
             print("sending pulse from ", module.name, "to", m.name, module.state)
             m.send_pulse()
+            count = count + 1
+
             pulsed = m.receive_pulse(module, module.state)
             print("pulsed ", pulsed, m.name, module.state)
 
-            count = count + 1
 
-        print("count ", m.state)
+            print("count ", m.state)
     
-    return pulsed, count, m.state
+    return pulsed # count, m.state
 
 
 def build_all_modules():
@@ -169,15 +176,15 @@ def button():
         print("found module", m.name, m.state, m)
 
         s = send_pulse(m, modules)
-        if s[0]:  # module sends to destination modules
+        if s:  # module sends to destination modules
 
             print("PULSE ", m.name)
 
-            if s[2] == 0:
-                low = low + s[1]
+            # if s[2] == 0:
+            #     low = low + s[1]
 
-            else:
-                high = high + s[1]
+            # else:
+            #     high = high + s[1]
 
             # appending destinations to send queue
             for d in m.dests:
