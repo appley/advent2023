@@ -22,12 +22,12 @@ def instructions(f):
         else:
             dict[l[0][1:]] = (l[0][0], d_list)
 
-        dict["output"] = ("ou", d_list)  # remove after test
+        dict["rx"] = ("ou", d_list)  # remove after test
 
     return dict
 
 
-INST = instructions(t)
+INST = instructions(f)
 
 
 def build_connections(con):
@@ -122,8 +122,8 @@ class Broadcaster:
 
 
 class Output:
-    def __init__(self):
-        self.name = "output"
+    def __init__(self, name):
+        self.name = name
         self.state = 0
         self.dests = []
     
@@ -145,7 +145,7 @@ def build_module(name):
     elif mod_type == "br":
         return Broadcaster()
     else:
-        return Output()
+        return Output(name)
 
 
 def build_all_modules():
@@ -211,7 +211,8 @@ def button(modules):
                 high = high + 1
 
             dest = get_module(d, modules)
-            print(d, dest)
+            if not dest:
+                dest = build_module(d)
 
             print("sending pulse from ", m.name, "--> ", dest.name, m.state)
             if dest.receive_pulse(m, m.state) == True:
@@ -241,6 +242,6 @@ def press(num):
 
     return high * low
 
-print(press(1000))
+print(press(1))
 
          
