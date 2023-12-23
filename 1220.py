@@ -27,8 +27,6 @@ def instructions(f):
     return dict
 
 
-
-
 INST = instructions(t)
 
 
@@ -131,13 +129,9 @@ class Output:
     
     def send_pulse(self):
         pass
-    # for d in self.dests:
-    #     d.receive_pulse(self.state)
 
     def receive_pulse(self, module, pulse_type):
         return True
-        # self._send_pulse(pulse_type)
-
 
 
 def build_module(name):
@@ -175,7 +169,7 @@ def get_module(name, modules):
 def button(modules):
 
     high = 0
-    low = 0
+    low = 1
     queue = []
 
     # start broadcaster
@@ -188,21 +182,19 @@ def button(modules):
 
     for d in b.dests:
         b.send_pulse()
+        low = low + 1
         print("sending pulse from broadcaster --->", d)
 
 
         dest = get_module(d, modules)
         print(dest.name, dest)
 
+        # generalize this to encompass code in loop
         new_state = dest.receive_pulse(b, b.state)
         if new_state == True:
-
             queue.append(d)
 
     print(queue)
-
-
-    # send_pulse(b, modules)
 
     # send pulses from queue 
     for _, q in enumerate(queue):
@@ -211,25 +203,24 @@ def button(modules):
 
         print("found module preparing to send pulses", m.name, m.state, m)
 
-        # module sends pulse to destination modules and dests receive pulse
-        # s = send_pulse(m, modules)
-
         for d in m.dests:
             m.send_pulse()
+            if m.state == 0:
+                low = low + 1
+            else:
+                high = high + 1
 
             dest = get_module(d, modules)
             print(d, dest)
 
             print("sending pulse from ", m.name, "--> ", dest.name, m.state)
             if dest.receive_pulse(m, m.state) == True:
-
                 queue.append(d)
                 print("adding to queue", d)
                 print(queue)
 
-    for m in modules:
-        print(m.name, m.state, m)
-
+    # for m in modules:
+    #     print(m.name, m.state, m)
     return (high, low)
 
 
@@ -237,12 +228,19 @@ def button(modules):
 # print(button())
 def press(num):
 
+    high = 0
+    low = 0
+
     modules = build_all_modules()
     print(modules)
 
     for i in range(num):
-        button(modules)
+        b = button(modules)
+        high = high + b[0]
+        low = low + b[1]
 
-print(press(4))
+    return high * low
+
+print(press(1000))
 
          
