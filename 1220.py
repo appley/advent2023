@@ -211,6 +211,7 @@ def button(modules):
                 high = high + 1
 
             dest = get_module(d, modules)
+
             if not dest:
                 dest = build_module(d)
 
@@ -244,4 +245,13 @@ def press(num):
 
 print(press(1))
 
-         
+
+# part 2
+
+def check_button_presses():
+
+    count = 1
+
+    
+
+    press(count)
