@@ -1,6 +1,6 @@
 f = open("input/1220.txt", "r")
 
-t = open("input/1220test.txt", "r")
+t = open("input/1220test2.txt", "r")
 
 
 def instructions(f):
@@ -32,10 +32,14 @@ class FlipFlop:
     def __init__(self, name):
         self.name = name
         self.state = 0
-        self.pulse_state = 0
         self.dests = INST[name][1]
+        self.pulse_queue = []
 
-    def send_pulse(self):
+    def send_pulse(self): #, pulse_type):
+        # pulse_type = self.pulse_queue[0] # get type of pulse to send
+        # self.pulse_queue.pop(0) # dequeue pulse
+        # return pulse_type
+
         pass
 
     def receive_pulse(self, module, pulse_type):
@@ -44,18 +48,17 @@ class FlipFlop:
             #     self.state = 1
             # elif self.state == 1:
             #     self.state = 0
-            #     # self._send_pulse(0)
-            #     self.pulse_state = 0       
+                # self._send_pulse(0)
             return False
         if pulse_type == 0:
             if self.state == 0:
                 self.state = 1
-                # self._send_pulse(1)
-                self.pulse_state = 1
+                # self.pulse_queue.append(1)
             elif self.state == 1:
                 self.state = 0
                 # self._send_pulse(0)
                 self.pulse_state = 0
+                # self.pulse_queue.append(0)
         return True
 
 class Con:
@@ -69,12 +72,12 @@ class Con:
     def send_pulse(self):
         d = []
         if all(v == 1 for _, v in self._connected.items()):
-            print("starting state for ", self.name, "to", self.state)
+            # print("starting state for ", self.name, "to", self.state)
             self.state = 0
-            print("setting state for ", self.name, "to", self.state)
+            # print("setting state for ", self.name, "to", self.state)
         else:
             self.state = 1
-            print("setting state for ", self.name, "to", self.state)
+            # print("setting state for ", self.name, "to", self.state)
 
 
     def receive_pulse(self, module, pulse_type):
@@ -91,11 +94,13 @@ class Broadcaster:
         self.dests = INST[self.name][1]
 
     def send_pulse(self):
-        for d in self.dests:
-            d.receive_pulse(self.state)
+        pass
+        # for d in self.dests:
+        #     d.receive_pulse(self.state)
 
     def receive_pulse(self, pulse_type):
         self.state = pulse_type
+        return True
         # self._send_pulse(pulse_type)
 
     
@@ -109,26 +114,6 @@ def build_module(name):
         return Con(name)
     else:
         return Broadcaster()
-
-
-def send_pulse(module, modules):
-    # module in current state and destination list
-
-    count = 0
-
-    for m in modules:
-        if m.name in module.dests:
-            print("sending pulse from ", module.name, "to", m.name, module.state)
-            m.send_pulse()
-            count = count + 1
-
-            pulsed = m.receive_pulse(module, module.state)
-            print("pulsed ", pulsed, m.name, module.state)
-
-
-            print("count ", m.state)
-    
-    return pulsed # count, m.state
 
 
 def build_all_modules():
@@ -149,6 +134,27 @@ def get_module(name, modules):
             return m
 
 
+# def send_pulse(module, modules):
+#     # module in current state and destination list
+
+#     # count = 0
+
+#     for m in modules:
+#         if m.name in module.dests:
+#             print("sending pulse from ", module.name, "to", m.name, module.state)
+#             m.send_pulse()
+#             # count = count + 1
+
+#             # receiving module receives pulse and changes its state accordingly
+#             pulsed = m.receive_pulse(module, module.state)
+#             print("pulsed ", pulsed, m.name, module.state)
+
+
+#             # print("count ", m.state)
+    
+#     return pulsed # count, m.state
+
+
 def button():
 
     high = 0
@@ -156,29 +162,63 @@ def button():
 
     modules = build_all_modules()
 
-    # add button logic
-    pulse_type = 0
+    # start broadcaster
+    start_pulse_type = 0
     b = Broadcaster()
-    print("dests", b.dests)
-    queue = b.dests
+    queue = []
+    b.receive_pulse(start_pulse_type)
 
-    b.receive_pulse(pulse_type)
-    print(b.state)
+    # send pulse from broadcaster and set inital state of receiving modules
 
-    send_pulse(b, modules)
+    for d in b.dests:
+        b.send_pulse()
 
-    # queue 
+        dest = get_module(d, modules)
+        print(dest.name, dest)
+
+        new_state = dest.receive_pulse(b, b.state)
+        if new_state == True:
+
+            queue.append(d)
+
+    print(queue)
+
+
+    # send_pulse(b, modules)
+
+    # send pulses from queue 
     for _, q in enumerate(queue):
-        print("queue", queue)
         # get module w name
         m = get_module(q, modules) # get sending module
 
-        print("found module", m.name, m.state, m)
+        print("found module preparing to send pulses", m.name, m.state, m)
 
-        s = send_pulse(m, modules)
-        if s:  # module sends to destination modules
+        # module sends pulse to destination modules and dests receive pulse
+        # s = send_pulse(m, modules)
 
-            print("PULSE ", m.name)
+        for d in m.dests:
+            m.send_pulse()
+
+            dest = get_module(d, modules)
+            print(d, dest)
+
+            print("sending pulse from ", m.name, "--> ", dest.name, m.state)
+            if dest.receive_pulse(m, m.state) == True:
+
+                queue.append(d)
+                print("adding to queue", d)
+                print(queue)
+
+
+
+
+
+
+
+        # if a destination received a pulse and needs to send a pulse it returns True
+        # if s:  
+
+        #     print("PULSE ", m.name)
 
             # if s[2] == 0:
             #     low = low + s[1]
@@ -187,16 +227,16 @@ def button():
             #     high = high + s[1]
 
             # appending destinations to send queue
-            for d in m.dests:
-                print("dests", m.dests) # append next sender
-                print("appending ", d)
-                queue.append(d)  # append to send queue
-                print("counting dest", d)
-                print("module state", m.state)
-                if m.state == 0:
-                    low = low + 1
-                else:
-                    high = high + 1
+            # for d in m.dests:
+                # print("dests", m.dests) # append next sender
+                # print("appending ", d)
+                # queue.append(d)  # append to send queue
+                # print("counting dest", d)
+                # print("module state", m.state)
+                # if m.state == 0:
+                #     low = low + 1
+                # else:
+                #     high = high + 1
         # send_pulse(m, modules)
 
     for m in modules:
