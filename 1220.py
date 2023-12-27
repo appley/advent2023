@@ -212,5 +212,6 @@ def press(num):
 if __name__ == "__main__":
 
 
+    # part 1
     print(press(1000))
          
