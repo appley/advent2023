@@ -1,11 +1,5 @@
 f = open("input/1214.txt", "r")
 
-t = open("input/1214test.txt", "r")
-
-t2 = open("input/1214test2.txt", "r")
-
-t3 = open("input/1214test3.txt", "r")
-
 
 def create_map(f):
 
@@ -106,7 +100,6 @@ def roll_rock_east(row, col):
     return row
 
 
-
 def tilt_east_row(row):
 
     count = 0
@@ -168,7 +161,6 @@ def tilt_in_cycle(map):
     return map
 
 
-
 def tilt_cycles(map, num_cycles):
 
     for cycle in range(num_cycles):
@@ -177,7 +169,6 @@ def tilt_cycles(map, num_cycles):
         map = tilt_in_cycle(cp)
     
     return map
-
 
 
 if __name__ == '__main__':
@@ -190,6 +181,4 @@ if __name__ == '__main__':
 
     # part 2
     print(total_weight(tilt_cycles(m, 1000)))
-
-
 
