@@ -200,7 +200,6 @@ def button(modules):
     for _, q in enumerate(queue):
         # get module w name
         m = get_module(q, modules) # get sending module
-
         print("found module preparing to send pulses", m.name, m.state, m)
 
         for d in m.dests:
@@ -209,6 +208,10 @@ def button(modules):
                 low = low + 1
             else:
                 high = high + 1
+
+            if d == "rx" and m.state == 1:
+                print("SENT low pulse to rx")
+                return True
 
             dest = get_module(d, modules)
 
@@ -221,29 +224,27 @@ def button(modules):
                 print("adding to queue", d)
                 print(queue)
 
-    # for m in modules:
-    #     print(m.name, m.state, m)
-    return (high, low)
+    return False
 
 
-
-# print(button())
-def press(num):
+def press(modules):
 
     high = 0
     low = 0
 
-    modules = build_all_modules()
-    print(modules)
+    # for i in range(num):
+    b = button(modules)
+    #     high = high + b[0]
+    #     low = low + b[1]
 
-    for i in range(num):
-        b = button(modules)
-        high = high + b[0]
-        low = low + b[1]
+    # return high * low
 
-    return high * low
-
-print(press(1))
+# print(press(1000))
+    
+    if b == True:
+        return True
+    else:
+        return False
 
 
 # part 2
@@ -252,6 +253,14 @@ def check_button_presses():
 
     count = 1
 
-    
+    modules = build_all_modules()
+    print(modules)
 
-    press(count)
+    while press(modules) != True:
+        count = count + 1
+        press(modules)
+        print("COUNT", count)
+
+    return count
+
+print(check_button_presses())
