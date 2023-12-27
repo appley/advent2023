@@ -1,7 +1,5 @@
 f = open("input/1215.txt", "r")
 
-TEST = ['rn=1', 'cm-', 'qp=3',  'cm=2', 'qp-', 'pc=4', 'ot=9', 'ab=5', 'pc-', 'pc=6', 'ot=7']
-
 
 def to_input_list(f):
 
@@ -73,10 +71,6 @@ def slide_lenses(box):
     return box
 
 
-# TEST_BOX = ["", "rn=1", "acd", "", "abc", "", ""]
-
-# print(handle_focal_length("rn=1", TEST_BOX))
-
 def insert_lens(lens, inst, box):
 
     if all(i == "" for i in box):
@@ -135,15 +129,13 @@ def total_power(boxes):
     return total
 
 
-l = to_input_list(f)
-new_l = organize_lenses(l)
+if __name__ == '__main__':
 
-print(total_power(new_l))
-
-
-# if __name__ == '__main__':
-
-#     l = to_input_list(f)
+    l = to_input_list(f)
     
-#     # part 1
-#     print(total(f))
+    # part 1
+    print(total(f))
+
+    # part 2
+    nl = organize_lenses(l)
+    print(total_power(nl))
