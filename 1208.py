@@ -1,12 +1,10 @@
 TEST_DIR = "LLR"
+# TEST = open("1208testinput.txt", "r")
 
-TEST = open("1208testinput.txt", "r")
-
-f = open("1208input.txt", "r")
+f = open("input/1208.txt", "r")
 
 DIRS = "LRLRLRRLRRRLRRRLRRRLRLRRRLRRRLRRRLLRLRRRLRLRRRLLRRRLRRLRRRLRRLRLRRRLRRRLRLRRLRRRLRRLRRRLRRLRLRRLRRRLRLRRLRRRLLRRRLRLRRLLLRLLRLRRLLRRRLLRLLRRLRLRRRLLLRLRRLRLRRLRRRLRRLLRRLLRLRRRLRRRLRLLLLRLLRLRLRLRRRLRRLRRLRLRRRLLRRLRLLRRLRLRRLRLRLRRLRRLLRLRRLLRLLRRRLLLRRRLRRLRLRRRLRRLRRRLRRLLLRRRR"
 
-# print(a[1].split(","))
 
 def line_to_list(line):
     # return three element tuple
@@ -29,8 +27,8 @@ def create_map(input):
 
     return map
 
-# cache start
 
+# cache start
 def index_direction(dir, key, map):
 
     print(map)
@@ -39,7 +37,8 @@ def index_direction(dir, key, map):
         return map[key][0]
     else:
         return map[key][1]
-    
+
+
 def go(direction_string, input):
 
     map = create_map(input)
@@ -57,13 +56,11 @@ def go(direction_string, input):
 
             count = count + 1
 
-    print(key)
- 
+    # print(key) 
     return count
 
-print(go(DIRS, f))
 
+if __name__ == "__main__":
 
-# a = create_map(TEST)
-
-# print(a)
+    # part 1
+    print(go(DIRS, f))
