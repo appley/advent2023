@@ -1,5 +1,5 @@
 
-f = open("1204input.txt", "r")
+f = open("input/1204.txt", "r")
 
 
 def create_winners_and_mine(card):
@@ -42,4 +42,6 @@ def process_all_cards(card_stack):
     return total
 
 
-print(process_all_cards(f))
+if __name__ == "__main__":
+
+    print(process_all_cards(f))
