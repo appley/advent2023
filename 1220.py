@@ -152,6 +152,9 @@ def button(modules):
     low = 1
     queue = []
 
+    def send_and_receive(module, dests):
+
+
     # start broadcaster
     start_pulse_type = 0
     b = get_module("broadcaster", modules)
@@ -164,9 +167,7 @@ def button(modules):
 
         dest = get_module(d, modules)
 
-        # generalize this to encompass code in loop
-        new_state = dest.receive_pulse(b, b.state)
-        if new_state == True:
+        if dest.receive_pulse(b, b.state) == True:  # generalize this to encompass code in loop
             queue.append(d)
 
     # send pulses from queue 
@@ -189,7 +190,7 @@ def button(modules):
             print("sending pulse from ", m.name, "--> ", dest.name, m.state)
             if dest.receive_pulse(m, m.state) == True:
                 queue.append(d)
-
+    
     return (high, low)
 
 
@@ -199,17 +200,17 @@ def press(num):
     low = 0
 
     modules = build_all_modules()
-    print(modules)
 
-    for i in range(num):
+    for _ in range(num):
         b = button(modules)
         high = high + b[0]
         low = low + b[1]
 
     return high * low
 
+
 if __name__ == "__main__":
 
-    print(press(1000))
 
+    print(press(1000))
          
