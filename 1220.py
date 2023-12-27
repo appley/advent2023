@@ -48,31 +48,20 @@ class FlipFlop:
         self.dests = INST[name][1]
         self.pulse_queue = []
 
-    def send_pulse(self): #, pulse_type):
-        # pulse_type = self.pulse_queue[0] # get type of pulse to send
-        # self.pulse_queue.pop(0) # dequeue pulse
-        # return pulse_type
-
+    def send_pulse(self): 
         pass
 
     def receive_pulse(self, module, pulse_type):
         if pulse_type == 1:
-            # if self.state == 0:
-            #     self.state = 1
-            # elif self.state == 1:
-            #     self.state = 0
-                # self._send_pulse(0)
             return False
         if pulse_type == 0:
             if self.state == 0:
                 self.state = 1
-                # self.pulse_queue.append(1)
             elif self.state == 1:
                 self.state = 0
-                # self._send_pulse(0)
                 self.pulse_state = 0
-                # self.pulse_queue.append(0)
         return True
+
 
 class Con:
     def __init__(self, name):
@@ -87,15 +76,9 @@ class Con:
     def send_pulse(self):
         d = []
         if all(v == 1 for _, v in self._connected.items()):
-            print("connected modules set to 1", self._connected)
-            # print("starting state for ", self.name, "to", self.state)
             self.state = 0
-            # print("setting state for ", self.name, "to", self.state)
         else:
-            print("connected modules not set to 1", self._connected)
             self.state = 1
-            # print("setting state for ", self.name, "to", self.state)
-
 
     def receive_pulse(self, module, pulse_type):
         self._connected[module.name] = pulse_type
@@ -112,13 +95,10 @@ class Broadcaster:
 
     def send_pulse(self):
         pass
-        # for d in self.dests:
-        #     d.receive_pulse(self.state)
 
     def receive_pulse(self, pulse_type):
         self.state = pulse_type
         return True
-        # self._send_pulse(pulse_type)
 
 
 class Output:
@@ -174,33 +154,25 @@ def button(modules):
 
     # start broadcaster
     start_pulse_type = 0
-    print("sending pulse from button to broadcaster --> ", start_pulse_type)
     b = get_module("broadcaster", modules)
     b.receive_pulse(start_pulse_type)
 
     # send pulse from broadcaster and set inital state of receiving modules
-
     for d in b.dests:
         b.send_pulse()
         low = low + 1
-        print("sending pulse from broadcaster --->", d)
-
 
         dest = get_module(d, modules)
-        print(dest.name, dest)
 
         # generalize this to encompass code in loop
         new_state = dest.receive_pulse(b, b.state)
         if new_state == True:
             queue.append(d)
 
-    print(queue)
-
     # send pulses from queue 
     for _, q in enumerate(queue):
         # get module w name
         m = get_module(q, modules) # get sending module
-
         print("found module preparing to send pulses", m.name, m.state, m)
 
         for d in m.dests:
@@ -217,16 +189,10 @@ def button(modules):
             print("sending pulse from ", m.name, "--> ", dest.name, m.state)
             if dest.receive_pulse(m, m.state) == True:
                 queue.append(d)
-                print("adding to queue", d)
-                print(queue)
 
-    # for m in modules:
-    #     print(m.name, m.state, m)
     return (high, low)
 
 
-
-# print(button())
 def press(num):
 
     high = 0
@@ -242,6 +208,8 @@ def press(num):
 
     return high * low
 
-print(press(1))
+if __name__ == "__main__":
+
+    print(press(1000))
 
          
