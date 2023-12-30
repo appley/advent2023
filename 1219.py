@@ -94,7 +94,7 @@ def parse_rule(rule):
 test_p = {'x': 787, 'm': 2655, 'a': 1222, 's': 1222}
 
 tr = parse_rule("a<2006:qkq")
-# print(tr)
+print(tr)
 # print(execute_rule(tr, test_part))
 
 
@@ -145,6 +145,11 @@ def read_workflow(workflow, part):
     
     return r[1]
 
+
+def process_part(part):
+
+    if read_workflow(part) != True or False:
+        return 
 
 # part 1
 ####
@@ -202,49 +207,58 @@ def accepted_letter_combos(rule_tuple):
     num = rule_tuple[0][2]
     dest = rule_tuple[1]
 
-
     if test == ">":
-        if dest == "A":
-            return (letter, max - num + 1)
-        elif dest == "R":
+        if dest == "R":
             return (letter, num - min + 1)
+        else:
+            return (letter, max - num + 1)
         
     if test == "<":
-        if dest == "A":
-            return (letter, num - min + 1)        
-        elif dest == "R":            
+        if dest == "R":            
             return (letter, max - num + 1)
+        else:
+            return (letter, num - min + 1)        
+
 
 
 def accepted_workflow_combos(workflow):
 
-    part = {
-        "x": 4000,
-        "m": 4000,
-        "a": 4000,
-        "s": 4000
-    }
+    rules = TEST_RULES[workflow]
+    print("workflow ", workflow)
 
-    for rule in workflow:
+    # rules = WORKFLOWS[workflow]
+
+    total = 1  # XCXC change this num
+
+# read rule
+# multiply accepted parts total
+# move to key and read rule
+
+    for rule in rules:
+
+        part = {
+            "x": 4000,
+            "m": 4000,
+            "a": 4000,
+            "s": 4000
+        }
+
+        r = parse_rule(rule)
+        dest = r[1]
         print(rule)
 
-        total = 0
-
-        if rule == "R":
-            return total
+        if dest == "R":
+            pass  # XCXC
         
-        elif rule == "A":
-            return part["x"] * part["m"] * part["a"] * part["s"]
+        elif dest == "A":
+            return total
 
         else:
-            r = parse_rule(rule)
             a = accepted_letter_combos(r)
             print(a)
             part[a[0]] = a[1]
 
-        print(part)
-
-    return part["x"] * part["m"] * part["a"] * part["s"]
+            total = total * part["x"] * part["m"] * part["a"] * part["s"]
 
 c = ['m<1130:R', 'm>1525:A',]
 
@@ -252,43 +266,194 @@ ci = ['m<1130:R', 'm>1525:abc', 'R']
 
 # x*calc inverse of m*a*s, x*calcm**a*s, return part total
 
-print(accepted_workflow_combos(c))
+
+        # else:
+        #     result = test_part(part, r)
+            
+        #     if result is True:
+        #         print("test passes moving to next key", r[1])
+        #         return r[1]
+        #     else:
+        #         continue
+    
+
+# print(accepted_workflow_combos(c))
 
 
-def read_workflow2(workflow):
+
+# def read_workflow2(workflow):
+
+#     for rule in rules:
+#         r = parse_rule(rule)
+#         # print(part)
+#         # print("r", r)
+
+#         if r[1] == "R":
+#             return r[1]
+#             # return final rule
+
+#         else:
+#             result = test_part(part, r)
+            
+#             if result is True:
+#                 print("test passes moving to next key", r[1])
+#                 return r[1]
+#             else:
+#                 continue
+    
+#     return r[1]
+
+
+# def total_accepted_combos(workflows):
+
+#     total = 1
+#     start = "in"
+    
+#     next = read_workflow2(start)
+
+#     # if 
+
+
+
+def combos(workflow):
 
     rules = TEST_RULES[workflow]
     print("workflow ", workflow)
 
     # rules = WORKFLOWS[workflow]
-    
-    for rule in rules:
-        r = parse_rule(rule)
-        # print(part)
-        # print("r", r)
 
-        if r[0] == 0:
-            return r[1]
-            # return final rule
+    total = 1  # XCXC change this num
+
+# read rule
+# multiply accepted parts total
+# move to key and read rule
+
+    for rule in rules:
+
+        part = {
+            "x": 4000,
+            "m": 4000,
+            "a": 4000,
+            "s": 4000
+        }
+
+        r = parse_rule(rule)
+        dest = r[1]
+        print(rule)
+
+        if dest == "R":
+            pass  # XCXC
+        
+        elif dest == "A":
+            return total
 
         else:
-            result = test_part(part, r)
-            
-            if result is True:
-                print("test passes moving to next key", r[1])
-                return r[1]
-            else:
-                continue
-    
-    return r[1]
+            a = accepted_letter_combos(r)
+            print(a)
+            part[a[0]] = a[1]
+
+            total = total * part["x"] * part["m"] * part["a"] * part["s"]
 
 
 def total_accepted_combos(workflows):
-
-    total = 1
-    start = "in"
     
-    combos = read_workflow2(start)
+    total = 0
+
+    for k in workflows:
+        rules = workflows[k]
+        for rule in rules:
+
+            part = {
+                "x": 4000,
+                "m": 4000,
+                "a": 4000,
+                "s": 4000
+            }
+
+            r = parse_rule(rule)
+            print(r)
+
+            dest = r[1]
+
+            if dest == "R":
+                continue
+        
+            elif r[0] == 0:
+                total = total + TOTAL_COMBOS
+
+            else:
+                a = accepted_letter_combos(r)
+                part[a[0]] = a[1]
+
+                total = total + part["x"] * part["m"] * part["a"] * part["s"]
+
+    return total
+
+
+
+def calculate_workflow_combos(workflow):
+    # list of rules
+
+    part = {
+    "x": 4000,
+    "m": 4000,
+    "a": 4000,
+    "s": 4000
+    }
+
+    cp = workflow
+    cp.reverse()
+
+    
+
+
+
+
+def total_accepted():
+
+    total = 0
+
+    for k, v in TEST_RULES.items():
+
+        for i, rule in enumerate(v):
+            r = parse_rule(rule)
+
+            letter = r[0][0]
+            test = r[0][1]
+            num = r[0][2]
+            dest = r[1]
+
+            if dest == "A":
+
+                part = {
+                    "x": 4000,
+                    "m": 4000,
+                    "a": 4000,
+                    "s": 4000
+                    }
+
+                pass
+
+                # trace path back to original key
+                # calculate rule
+            
+            else:
+                pass
+
+
+
+            
+
+
+
+
+        
+    
+
+print(TEST_RULES)
+
+
+# print(total_accepted_combos(TEST_RULES))
 
 
 
