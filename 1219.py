@@ -68,29 +68,6 @@ def parse_rule(rule):
     return (test, s[1])
 
 
-# def execute_rule(rule_tuple, part):
-#     # rule_tuple : (test, destination)
-#     # returns rule's destination after test
-
-#     if not rule_tuple[0]:
-#         # return destination
-#         return rule_tuple[1]
-    
-#     else:
-#         letter = rule_tuple[0][0]
-#         test = rule_tuple[0][1]
-#         num = rule_tuple[0][2]
-
-#         if test == ">":
-#             if part[letter] > num:
-#                 return rule_tuple[1]
-            
-#         elif test == "<":
-#             if part[letter] < num:
-#                 return rule_tuple[1]
-            
-#     return False
-
 test_p = {'x': 787, 'm': 2655, 'a': 1222, 's': 1222}
 
 # tr = parse_rule("a<2006:qkq")
